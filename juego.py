@@ -1,5 +1,6 @@
 from board_and_rules import Connect4, minimax
 
+
 def play_game():
     game = Connect4()
     turn = 1
@@ -26,7 +27,7 @@ def play_game():
 
             game.drop_piece(column, player)
         else:  # AI player
-            column, _ = minimax(game, 4, -float('inf'), float('inf'), True, player)
+            column, _ = minimax(game, 4, -float("inf"), float("inf"), True, player)
             game.drop_piece(column, player)
             print(f"Jugador {player} (AI) elige la columna: {column+1}")
 
