@@ -5,14 +5,18 @@ def play_game():
     game = Connect4()
     turn = 1
 
+    mode = input(
+        "Elige el modo de juego: 1 (Humano vs IA) o 2 (IA vs IA - Sin poda vs Con poda): "
+    )
+    human_players = mode == "1"
+
     while True:
         game.print_board()
         player = 1 if turn % 2 != 0 else 2
 
-        if player == 1:  # Human player
+        if human_players and player == 1:
             try:
-                column = int(input(f"Jugador {player}, elige una columna (1-7): "))
-                column = column - 1
+                column = int(input(f"Jugador {player}, elige una columna (1-7): ")) - 1
             except ValueError:
                 print("Entrada inválida. Intenta nuevamente.")
                 continue
@@ -26,10 +30,22 @@ def play_game():
                 continue
 
             game.drop_piece(column, player)
-        else:  # AI player
-            column, _ = minimax(game, 4, -float("inf"), float("inf"), True, player)
+        else:
+            use_alpha_beta = player == 2
+            column, _ = minimax(
+                game, 4, -float("inf"), float("inf"), True, player, use_alpha_beta
+            )
+            print(
+                "----------------------------------------player: ",
+                player,
+                "esta usando alpha_beta?: ",
+                use_alpha_beta,
+                "----------------------------------------",
+            )
             game.drop_piece(column, player)
-            print(f"Jugador {player} (AI) elige la columna: {column+1}")
+            print(
+                f"Jugador {player} (AI{' con poda' if use_alpha_beta else ' sin poda'}) elige la columna: {column+1}"
+            )
 
         if game.check_winner(player):
             game.print_board()
